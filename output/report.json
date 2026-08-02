@@ -1,0 +1,31 @@
+{
+  "fecha": "2026-08-02T21:03:26.604Z",
+  "resumen": {
+    "total": 12,
+    "activas": 8,
+    "inactivas": 2,
+    "enMantenimiento": 2,
+    "promedioPrecioPorFicha": 525,
+    "maquinaMasCara": "Initial D",
+    "maquinaMasBarata": "Galaga"
+  },
+  "filtroAplicado": "Disparos",
+  "maquinas": [
+    {
+      "id": 10,
+      "nombre": "House of the Dead",
+      "tipo": "Disparos",
+      "precioPorFicha": 600,
+      "estado": "inactiva",
+      "ultimoMantenimiento": "2024-12-05"
+    },
+    {
+      "id": 12,
+      "nombre": "Metal Slug",
+      "tipo": "Disparos",
+      "precioPorFicha": 500,
+      "estado": "activa",
+      "ultimoMantenimiento": "2025-02-25"
+    }
+  ]
+}
