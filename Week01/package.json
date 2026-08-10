@@ -1,0 +1,22 @@
+{
+  "name": "bc-express-3228973b-juan-soto",
+  "version": "1.0.0",
+  "description": "CLI procesador de datos - dominio Sala de videojuegos / Arcade",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "express": "5.1.0",
+    "ts-node": "^10.9.2"
+  },
+  "devDependencies": {
+    "@types/express": "5.0.1",
+    "@types/node": "^22.15.21",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3"
+  }
+}
