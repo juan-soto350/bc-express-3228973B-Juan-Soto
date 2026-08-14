@@ -1,0 +1,38 @@
+{
+  "name": "week-05-proyecto",
+  "version": "1.0.0",
+  "description": "Proyecto semana 05 — API con PostgreSQL y Prisma ORM. Dominio: Sala de Videojuegos / Arcade",
+  "main": "dist/server.js",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "packageManager": "pnpm@10.34.5",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "typecheck": "tsc --noEmit",
+    "postinstall": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "prisma db seed"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "6.8.2",
+    "dotenv": "^16.4.5",
+    "express": "5.1.0",
+    "morgan": "1.10.1",
+    "winston": "3.17.0",
+    "zod": "4.3.6"
+  },
+  "devDependencies": {
+    "@types/express": "5.0.3",
+    "@types/morgan": "1.9.10",
+    "@types/node": "22.15.21",
+    "prisma": "6.8.2",
+    "tsx": "4.19.4",
+    "typescript": "5.8.3"
+  }
+}

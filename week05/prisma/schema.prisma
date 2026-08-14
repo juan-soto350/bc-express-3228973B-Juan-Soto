@@ -1,0 +1,80 @@
+// Prisma Schema — Semana 05
+// Dominio: Sala de Videojuegos / Arcade
+// Relaciones: Machine 1:N Maintenance, Player 1:N Token, Token N:1 Machine/Player
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum MachineEstado {
+  activa
+  inactiva
+  mantenimiento
+}
+
+enum TokenEstado {
+  activo
+  usado
+  expirado
+}
+
+enum PlayerNivel {
+  principiante
+  intermedio
+  experto
+}
+
+model Machine {
+  id                 Int              @id @default(autoincrement())
+  codigo             String           @unique
+  nombre             String
+  tipo               String
+  precioPorFicha     Int
+  estado             MachineEstado    @default(activa)
+  ultimoMantenimiento String?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  maintenance        Maintenance[]
+  tokens             Token[]
+}
+
+model Maintenance {
+  id          Int      @id @default(autoincrement())
+  machineId   Int
+  tecnico     String
+  descripcion String
+  fecha       String
+  costo       Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  machine     Machine  @relation(fields: [machineId], references: [id], onDelete: Cascade)
+}
+
+model Player {
+  id        Int          @id @default(autoincrement())
+  alias     String       @unique
+  nombre    String
+  edad      Int
+  nivel     PlayerNivel  @default(principiante)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  tokens    Token[]
+}
+
+model Token {
+  id        Int         @id @default(autoincrement())
+  codigo    String      @unique
+  cantidad  Int
+  estado    TokenEstado @default(activo)
+  machineId Int
+  playerId  Int
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  machine   Machine     @relation(fields: [machineId], references: [id])
+  player    Player      @relation(fields: [playerId], references: [id])
+}
