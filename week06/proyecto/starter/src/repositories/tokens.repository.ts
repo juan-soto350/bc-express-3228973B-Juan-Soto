@@ -1,5 +1,4 @@
-import { MongoServerError } from 'mongodb';
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import { Token } from '../models/token.model';
 import { AppError } from '../errors/AppError';
 import type { CreateTokenDto, UpdateTokenDto } from '../schemas/token.schema';
@@ -50,11 +49,12 @@ export async function findById(id: string): Promise<unknown> {
 
 export async function create(dto: CreateTokenDto): Promise<unknown> {
   try {
-    const token = await Token.create(dto);
+    const token = await new Token({ ...dto, player: new Types.ObjectId(dto.player) }).save();
     return token.toJSON();
-  } catch (err) {
-    if (err instanceof MongoServerError && err.code === 11000) {
-      const field = Object.keys(err.keyValue ?? {})[0] ?? 'campo';
+  } catch (err: unknown) {
+    if (err instanceof Error && err.name === 'MongoServerError' && (err as unknown as Record<string, unknown>).code === 11000) {
+      const keyVal = (err as unknown as Record<string, Record<string, unknown>>).keyValue ?? {};
+      const field = Object.keys(keyVal)[0] ?? 'campo';
       throw new AppError(409, `El ${field} ya está registrado`);
     }
     throw err;
@@ -71,10 +71,6 @@ export async function update(id: string, dto: UpdateTokenDto): Promise<unknown> 
     return token;
   } catch (err) {
     if (err instanceof mongoose.Error.CastError) throw new AppError(400, 'ID inválido');
-    if (err instanceof MongoServerError && err.code === 11000) {
-      const field = Object.keys(err.keyValue ?? {})[0] ?? 'campo';
-      throw new AppError(409, `El ${field} ya está registrado`);
-    }
     throw err;
   }
 }

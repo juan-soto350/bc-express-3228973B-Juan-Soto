@@ -25,7 +25,7 @@ export async function getById(
   next: NextFunction,
 ): Promise<void> {
   try {
-    const player = await playersService.findById(req.params['id']);
+    const player = await playersService.findById(String(req.params['id']));
     res.json({ data: player });
   } catch (err) {
     next(err);
@@ -53,7 +53,7 @@ export async function update(
 ): Promise<void> {
   try {
     const parsed = updatePlayerSchema.parse(req.body);
-    const player = await playersService.update(req.params['id'], parsed);
+    const player = await playersService.update(String(req.params['id']), parsed);
     res.json({ data: player });
   } catch (err) {
     next(err);
@@ -66,7 +66,7 @@ export async function remove(
   next: NextFunction,
 ): Promise<void> {
   try {
-    await playersService.remove(req.params['id']);
+    await playersService.remove(String(req.params['id']));
     res.status(204).send();
   } catch (err) {
     next(err);

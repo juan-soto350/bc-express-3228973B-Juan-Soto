@@ -24,7 +24,7 @@ export async function getById(
   next: NextFunction,
 ): Promise<void> {
   try {
-    const token = await tokensService.findById(req.params['id']);
+    const token = await tokensService.findById(String(req.params['id']));
     res.json({ data: token });
   } catch (err) {
     next(err);
@@ -52,7 +52,7 @@ export async function update(
 ): Promise<void> {
   try {
     const parsed = updateTokenSchema.parse(req.body);
-    const token = await tokensService.update(req.params['id'], parsed);
+    const token = await tokensService.update(String(req.params['id']), parsed);
     res.json({ data: token });
   } catch (err) {
     next(err);
@@ -65,7 +65,7 @@ export async function remove(
   next: NextFunction,
 ): Promise<void> {
   try {
-    await tokensService.remove(req.params['id']);
+    await tokensService.remove(String(req.params['id']));
     res.status(204).send();
   } catch (err) {
     next(err);

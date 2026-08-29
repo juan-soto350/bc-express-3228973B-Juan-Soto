@@ -1,4 +1,3 @@
-import { MongoServerError } from 'mongodb';
 import mongoose from 'mongoose';
 import { Player } from '../models/player.model';
 import { AppError } from '../errors/AppError';
@@ -54,9 +53,10 @@ export async function create(dto: CreatePlayerDto): Promise<unknown> {
   try {
     const player = await Player.create(dto);
     return player.toJSON();
-  } catch (err) {
-    if (err instanceof MongoServerError && err.code === 11000) {
-      const field = Object.keys(err.keyValue ?? {})[0] ?? 'campo';
+  } catch (err: unknown) {
+    if (err instanceof Error && err.name === 'MongoServerError' && (err as unknown as Record<string, unknown>).code === 11000) {
+      const keyVal = (err as unknown as Record<string, Record<string, unknown>>).keyValue ?? {};
+      const field = Object.keys(keyVal)[0] ?? 'campo';
       throw new AppError(409, `El ${field} ya está registrado`);
     }
     throw err;
@@ -73,10 +73,6 @@ export async function update(id: string, dto: UpdatePlayerDto): Promise<unknown>
     return player;
   } catch (err) {
     if (err instanceof mongoose.Error.CastError) throw new AppError(400, 'ID inválido');
-    if (err instanceof MongoServerError && err.code === 11000) {
-      const field = Object.keys(err.keyValue ?? {})[0] ?? 'campo';
-      throw new AppError(409, `El ${field} ya está registrado`);
-    }
     throw err;
   }
 }
