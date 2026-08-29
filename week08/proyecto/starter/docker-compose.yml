@@ -1,0 +1,16 @@
+services:
+  mongo:
+    image: mongo:7
+    container_name: bootcamp_mongo_arcade_week08
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: bootcamp
+      MONGO_INITDB_ROOT_PASSWORD: bootcamp123
+      MONGO_INITDB_DATABASE: bootcamp_arcade_auth
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_arcade_week08_data:/data/db
+
+volumes:
+  mongo_arcade_week08_data:
